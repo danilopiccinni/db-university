@@ -1,0 +1,97 @@
+1)
+
+SELECT `students`.`name` AS `nome_alunno` , `degrees`.`name` AS `corso`
+FROM `students`
+INNER JOIN `degrees`
+ON `students`.`degree_id` = `degrees`.`id`
+WHERE `degrees`.`name` = 'Corso di Laurea in Economia';
+
+
+
+2)
+
+SELECT `degrees`.`name` AS `nome_corso` , `departments`.`name` AS `nome_dipartimento`
+FROM `degrees`
+INNER JOIN `departments`
+ON `degrees`.`department_id` = `departments`.`id`
+WHERE `degrees`.`level` = 'Magistrale'
+AND `departments`.`name` = 'Dipartimento di Neuroscienze';
+
+
+3)
+
+SELECT `teachers`.`name` , `teachers`.`surname` , `courses`.`name`
+FROM `teachers`
+INNER JOIN `course_teacher`
+ON `teachers`.`id` = `course_teacher`.`teacher_id`
+INNER JOIN `courses`
+ON `course_teacher`.`course_id` = `courses`.`id`
+WHERE `teachers`.`name` = 'Fulvio'
+AND `teachers`.`surname` = 'Amato';
+
+
+
+4)
+
+SELECT * 
+FROM `students`
+INNER JOIN `degrees`
+ON `students`.`degree_id` = `degrees`.`id`
+INNER JOIN `departments`
+ON `degrees`.`department_id` = `departments`.`id`
+ORDER BY `students`.`surname` ASC , `students`.`name` ASC;
+
+
+
+5)
+
+SELECT `degrees`.`name` AS `deg_name` , `courses`.`name` AS `cour_name` , `teachers`.`surname` , `teachers`.`name`
+FROM `degrees`
+INNER JOIN `courses`
+ON `degrees`.`id` = `courses`.`degree_id`
+INNER JOIN `course_teacher`
+ON `courses`.`id`  = `course_teacher`.`course_id`
+INNER JOIN `teachers`
+ON `course_teacher`.`teacher_id` = `teachers`.`id`  
+ORDER BY `deg_name`;
+
+
+
+
+6)
+
+SELECT `teachers`.`surname` , `departments`.`name`
+FROM `teachers`
+INNER JOIN `course_teacher`
+ON `teachers`.`id`=`course_teacher`.`teacher_id`
+INNER JOIN `courses`
+ON `course_teacher`.`course_id`=`courses`.`id`
+INNER JOIN `degrees`
+ON `courses`.`degree_id`= `degrees`.`id`
+INNER JOIN `departments`
+ON `degrees`.`department_id`=`departments`.`id`
+WHERE `departments`.`name` = 'Dipartimento di Matematica'
+GROUP BY `teachers`.`id`;
+
+
+
+7)
+
+
+SELECT `students`.`name` AS `nome` , `students`.`surname` as `cognome`, `exams`.`course_id` AS `corso_id` , COUNT(`exam_student`.`student_id`) AS `tentivi_di_esame`
+FROM `students`
+INNER JOIN `exam_student`
+ON `students`.`id` = `exam_student`.`student_id`
+INNER JOIN `exams`
+ON `exam_student`.`exam_id` = `exams`.`id`
+GROUP BY `students`.`id` , `exams`.`course_id`;
+
+SELECT `students`.`name` AS `nome` , `students`.`surname` as `cognome`, `courses`.`name` AS `nome_corso` , COUNT(`exam_student`.`student_id`) AS `tentivi_di_esame`
+FROM `students`
+INNER JOIN `exam_student`
+ON `students`.`id` = `exam_student`.`student_id`
+INNER JOIN `exams`
+ON `exam_student`.`exam_id` = `exams`.`id`
+INNER JOIN `courses`
+ON `exams`.`course_id` = `courses`.`id`  
+GROUP BY `students`.`id` , `courses`.`id`; 
